@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+@import '@fontsource/space-grotesk/latin-400.css';
+@import '@fontsource/space-grotesk/latin-500.css';
+@import '@fontsource/space-grotesk/latin-700.css';
+@import '@fontsource/jetbrains-mono/latin-400.css';
+@import '@fontsource/jetbrains-mono/latin-500.css';
+
+@theme {
+	--font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+	--color-night: #020604;
+	--color-abyss: #04100a;
+	--color-panel: #0a1f16;
+	--color-panel-strong: #0d2a1d;
+	--color-neon: #00ff9d;
+	--color-neon-bright: #66ffb0;
+	--color-cyber: #00e5ff;
+	--color-mist: #a8e6c8;
+	--color-faint: #6f907f;
+
+	--shadow-neon-sm: 0 0 6px rgb(0 255 157 / 0.45);
+	--shadow-neon: 0 0 14px rgb(0 255 157 / 0.5);
+	--shadow-neon-lg: 0 0 42px rgb(0 255 157 / 0.4);
+	--shadow-neon-inset: inset 0 0 14px rgb(0 255 157 / 0.16);
+	--shadow-cyber: 0 0 14px rgb(0 229 255 / 0.5);
+}

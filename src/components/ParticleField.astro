@@ -1,0 +1,133 @@
+<canvas id="neon-particles" aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10"></canvas>
+
+<script is:inline data-astro-rerun>
+	(function () {
+		var canvas = document.getElementById('neon-particles');
+		if (!canvas || !canvas.getContext) return;
+		var ctx = canvas.getContext('2d');
+		if (!ctx) return;
+
+		var state = (window['__neonParticles'] = window['__neonParticles'] || {});
+
+		if (state.raf) cancelAnimationFrame(state.raf);
+		if (state.onResize) window.removeEventListener('resize', state.onResize);
+		if (state.onVisibility) document.removeEventListener('visibilitychange', state.onVisibility);
+
+		var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		var particles = [];
+		var w = 0;
+		var h = 0;
+		var t = 0;
+
+		function spawn(anywhere) {
+			return {
+				x: Math.random() * w,
+				y: anywhere ? Math.random() * h : h + 8,
+				vx: (Math.random() - 0.5) * 0.18,
+				vy: -(0.12 + Math.random() * 0.3),
+				r: 0.8 + Math.random() * 1.8,
+				cyan: Math.random() < 0.2,
+				phase: Math.random() * Math.PI * 2,
+				tw: 0.6 + Math.random() * 2.2,
+			};
+		}
+
+		function resize() {
+			w = canvas.width = window.innerWidth;
+			h = canvas.height = window.innerHeight;
+			var target = Math.min(110, Math.floor((w * h) / 20000));
+			particles = Array.from({ length: target }, function () {
+				return spawn(true);
+			});
+		}
+
+		function twinkle(p) {
+			return 0.35 + 0.65 * Math.abs(Math.sin(t * p.tw + p.phase));
+		}
+
+		function drawStar(p, alpha, rgb) {
+			var bloom = p.r * 3.5;
+			ctx.beginPath();
+			ctx.arc(p.x, p.y, bloom, 0, Math.PI * 2);
+			ctx.fillStyle = 'rgba(' + rgb + ', ' + (alpha * 0.12).toFixed(3) + ')';
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+			ctx.fillStyle = 'rgba(' + rgb + ', ' + (alpha * 0.85).toFixed(3) + ')';
+			ctx.fill();
+		}
+
+		function connections() {
+			for (var i = 0; i < particles.length; i++) {
+				var a = particles[i];
+				for (var j = i + 1; j < particles.length; j++) {
+					var b = particles[j];
+					var dx = a.x - b.x;
+					var dy = a.y - b.y;
+					var dist = Math.hypot(dx, dy);
+					if (dist < 120) {
+						var alpha = 1 - dist / 120;
+						ctx.beginPath();
+						ctx.moveTo(a.x, a.y);
+						ctx.lineTo(b.x, b.y);
+						ctx.strokeStyle = 'rgba(0, 255, 157, ' + (alpha * 0.14).toFixed(3) + ')';
+						ctx.lineWidth = 1;
+						ctx.stroke();
+					}
+				}
+			}
+		}
+
+		function frame() {
+			t += 0.016;
+			ctx.clearRect(0, 0, w, h);
+			for (var i = 0; i < particles.length; i++) {
+				var p = particles[i];
+				p.x += p.vx;
+				p.y += p.vy;
+				if (p.y < -10 || p.x < -10 || p.x > w + 10) {
+					particles[i] = spawn(false);
+					continue;
+				}
+				drawStar(p, twinkle(p), p.cyan ? '0, 229, 255' : '0, 255, 157');
+			}
+			connections();
+			state.raf = requestAnimationFrame(frame);
+		}
+
+		function drawOnce() {
+			ctx.clearRect(0, 0, w, h);
+			for (var i = 0; i < particles.length; i++) {
+				drawStar(particles[i], 0.85, particles[i].cyan ? '0, 229, 255' : '0, 255, 157');
+			}
+		}
+
+		function onResize() {
+			resize();
+			if (reduced) drawOnce();
+		}
+
+		function onVisibility() {
+			if (document.hidden) {
+				if (state.raf) cancelAnimationFrame(state.raf);
+			} else if (!reduced) {
+				frame();
+			}
+		}
+
+		state.onResize = onResize;
+		state.onVisibility = onVisibility;
+		state.raf = 0;
+
+		resize();
+		if (reduced) {
+			drawOnce();
+		} else {
+			frame();
+		}
+
+		window.addEventListener('resize', onResize);
+		document.addEventListener('visibilitychange', onVisibility);
+	})();
+</script>

@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { GITHUB_USER, projects } from '../data/site';
+
+const title = 'Projects — Majunko';
+const description =
+	'Open source projects by Majunko: Tidal scrobbling, a ListenBrainz browser scrobbler, and safe music-history migrations.';
+---
+
+<Layout title={title} description={description}>
+	<section class="mx-auto max-w-5xl px-6 py-24">
+		<header data-reveal>
+			<p class="font-mono text-sm text-faint">
+				<span class="neon-text">//</span> ~/repositories
+			</p>
+			<h1 class="mt-3 text-4xl font-bold text-mist sm:text-5xl">
+				Selected <span class="neon-text neon-flicker">projects</span>
+			</h1>
+			<p class="mt-4 max-w-xl text-lg text-faint">
+				Tools built for real problems. Everything is open source — star count
+				optional, mileage guaranteed.
+			</p>
+		</header>
+
+		<div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				projects.map((project, i) => (
+					<a
+						href={project.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class:list={[
+							'neon-border glass card-hover group flex flex-col rounded-lg p-6',
+							i === 0 && 'sm:col-span-2 lg:col-span-1',
+						]}
+						data-reveal
+						style={`transition-delay: ${i * 90}ms`}
+					>
+						<div class="flex items-start justify-between gap-4">
+							<h2 class="font-mono text-lg text-neon-bright group-hover:neon-text">{project.title}</h2>
+							<svg
+								class="mt-1 h-5 w-5 shrink-0 text-faint transition-all duration-200 group-hover:text-neon-bright group-hover:shadow-neon-sm"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"
+							>
+								<path d="M7 17 17 7" />
+								<path d="M9 7h8v8" />
+							</svg>
+						</div>
+
+						<p class="mt-3 grow text-sm leading-relaxed text-mist/85">{project.description}</p>
+
+						<div class="mt-6 flex flex-wrap gap-2" aria-label="tags">
+							{
+								project.tags.map((tag) => (
+									<span class="rounded-full border border-neon/25 bg-neon/5 px-2.5 py-1 font-mono text-xs text-faint">
+										{tag}
+									</span>
+								))
+							}
+						</div>
+
+						<div class="mt-6 flex items-center justify-between border-t border-neon/15 pt-4 font-mono text-xs text-faint">
+							<span class="flex items-center gap-2">
+								<span
+									class:list={[
+										'h-2 w-2 rounded-full',
+										project.language === 'TypeScript' ? 'bg-cyber shadow-cyber' : 'bg-neon shadow-neon-sm',
+									]}
+									aria-hidden="true"
+								></span>
+								{project.language}
+							</span>
+							<span class="uppercase tracking-wider">{project.repo}</span>
+						</div>
+					</a>
+				))
+			}
+
+			<a
+				href={`https://github.com/${GITHUB_USER}`}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="neon-border glass card-hover flex items-center justify-center gap-3 rounded-lg p-6 font-mono text-sm text-neon-bright"
+				data-reveal
+				style="transition-delay: 300ms"
+			>
+				more on github →
+			</a>
+		</div>
+	</section>
+</Layout>

@@ -1,0 +1,38 @@
+---
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const links = [
+	{ href: '/', label: 'Home' },
+	{ href: '/projects', label: 'Projects' },
+	{ href: '/about', label: 'About' },
+];
+---
+
+<header class="sticky top-0 z-40">
+	<div class="border-b border-neon/15 bg-night/70 backdrop-blur-md">
+		<div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+			<a href="/" class="group flex items-center gap-2 font-mono text-sm text-neon-bright">
+				<span class="neon-text">&gt;_</span>
+				majunko<span class="text-faint">.dev</span>
+				<span class="text-neon opacity-0 transition-opacity duration-200 group-hover:opacity-100">|</span>
+			</a>
+			<nav class="flex items-center gap-1 font-mono text-sm">
+				{
+					links.map((link) => (
+						<a
+							href={link.href}
+							class:list={[
+								'px-3 py-1.5 transition-colors duration-200',
+								path === link.href
+									? 'neon-text text-neon-bright'
+									: 'text-faint hover:text-neon-bright',
+							]}
+						>
+							{link.label}
+						</a>
+					))
+				}
+			</nav>
+		</div>
+	</div>
+</header>

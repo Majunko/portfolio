@@ -1,0 +1,57 @@
+---
+import { SOCIALS } from '../data/site';
+
+interface Props {
+	label?: string;
+	class?: string;
+}
+
+const { label = 'email', class: className } = Astro.props;
+const { local, domain, tld } = SOCIALS.email;
+---
+
+<a
+	href="#"
+	data-email-protected
+	data-email-local={local}
+	data-email-domain={domain}
+	data-email-tld={tld}
+	class:list={['email-protected', className]}
+>
+	{label}
+</a>
+
+<script data-astro-rerun is:inline>
+	(function () {
+		const links = document.querySelectorAll('.email-protected');
+		for (const link of links) {
+			if (!(link instanceof HTMLAnchorElement)) continue;
+			if (link.dataset.emailDone) {
+				link.href = 'mailto:' + link.dataset.emailAddress;
+				continue;
+			}
+
+			const address =
+				link.dataset.emailLocal +
+				'@' +
+				link.dataset.emailDomain +
+				'.' +
+				link.dataset.emailTld;
+
+			link.dataset.emailAddress = address;
+			link.dataset.emailDone = '1';
+			link.href = 'mailto:' + address;
+			link.setAttribute('aria-label', 'Email ' + address);
+
+			const reveal = () => {
+				if (link.textContent && link.textContent.indexOf('@') === -1) {
+					link.textContent = address;
+				}
+			};
+
+			link.addEventListener('mouseenter', reveal);
+			link.addEventListener('focus', reveal);
+			link.addEventListener('click', reveal);
+		}
+	})();
+</script>

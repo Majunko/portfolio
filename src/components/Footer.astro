@@ -1,0 +1,26 @@
+---
+import EmailLink from './EmailLink.astro';
+import { ALIAS, NAME, SOCIALS } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-neon/15">
+	<div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-5 px-6 py-10 sm:flex-row">
+		<p class="font-mono text-sm text-faint">
+			<span class="text-neon">&gt;</span> © {year}{' '}
+			<span class="text-neon-bright">{NAME}</span>{' '}<span class="text-faint">/{ALIAS}</span> · built with Astro &#38; Tailwind
+		</p>
+		<nav class="flex items-center gap-6 font-mono text-sm">
+			<a
+				href={SOCIALS.github}
+				target="_blank"
+				rel="me noopener noreferrer"
+				class="text-faint transition-colors duration-200 hover:text-neon-bright hover:neon-text"
+			>
+				github
+			</a>
+			<EmailLink class="text-faint transition-colors duration-200 hover:text-neon-bright hover:neon-text" />
+		</nav>
+	</div>
+</footer>

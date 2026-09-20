@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ALIAS, GITHUB_USER, NAME, roles } from '../data/site';
+
+const title = `${NAME} (${ALIAS}) — builder of CLI tools & automations`;
+const description =
+	`Portfolio of ${NAME}, also known as ${ALIAS}: command-line tools, web automations and open source projects.`;
+
+const phrases = JSON.stringify(roles);
+
+const profile = {
+	focus: ['cli tools', 'automation', 'web scraping'],
+	languages: ['JavaScript', 'Python', 'PHP'],
+	status: 'IN_THE_MATRIX',
+	uptime: 'active',
+	hobby: 'hacking on open source',
+};
+
+const profileText = `{
+  "focus": ${JSON.stringify(profile.focus)},
+  "languages": ${JSON.stringify(profile.languages)},
+  "status": ${JSON.stringify(profile.status)},
+  "uptime": ${JSON.stringify(profile.uptime)},
+  "hobby": ${JSON.stringify(profile.hobby)}
+}`;
+---
+
+<Layout title={title} description={description}>
+	<section class="relative flex min-h-[92vh] items-center overflow-hidden">
+		<div class="bg-grid absolute inset-0" aria-hidden="true"></div>
+		<div class="scanlines absolute inset-0" aria-hidden="true"></div>
+		<div class="sweep-line" aria-hidden="true"></div>
+
+		<div class="relative mx-auto grid w-full max-w-5xl gap-12 px-6 py-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+			<div>
+				<p class="mb-6 flex items-center gap-3 font-mono text-sm text-neon-bright" data-reveal>
+					<span class="glow-dot" aria-hidden="true"></span>
+					<span class="neon-text">system.online</span>
+					<span class="text-faint">:: waiting for input</span>
+				</p>
+
+				<h1
+					class="text-5xl font-bold leading-[1.05] tracking-tight text-mist sm:text-6xl lg:text-7xl"
+					data-reveal
+				>
+<span class="font-mono text-lg text-faint sm:text-xl">&gt; whoami</span>
+				<br />
+				<span class="neon-text neon-flicker">{NAME}</span>
+				<br />
+				<span class="mt-2 block font-mono text-base text-faint sm:text-lg">aka {ALIAS}</span>
+				</h1>
+
+				<p
+					class="mt-6 h-8 font-mono text-lg text-neon-bright sm:text-xl"
+					data-reveal
+				>
+					<span class="text-faint">&gt;</span> <span id="typed" data-phrases={phrases}></span><span class="blink text-neon">▌</span>
+				</p>
+
+				<p class="mt-8 max-w-md text-lg leading-relaxed text-mist/90" data-reveal>
+					I write software that lives in the terminal — scrapers, automation
+					scripts and integrations that quietly do the boring work, so I don't
+					have to.
+				</p>
+
+				<div class="mt-10 flex flex-wrap items-center gap-4" data-reveal>
+					<a
+						href="/projects"
+						class="rounded border border-neon bg-neon/10 px-6 py-3 font-mono text-sm text-neon-bright shadow-neon-sm transition-all duration-200 hover:bg-neon/20 hover:shadow-neon"
+					>
+						view_projects ->
+					</a>
+					<a
+						href="/about"
+						class="rounded border border-neon/30 px-6 py-3 font-mono text-sm text-mist transition-all duration-200 hover:border-neon/70 hover:text-neon-bright hover:shadow-neon-sm"
+					>
+						about_me
+					</a>
+				</div>
+			</div>
+
+			<div class="hidden lg:block" data-reveal>
+				<div class="neon-border glass overflow-hidden rounded-lg font-mono text-sm shadow-neon-sm">
+					<div class="flex items-center gap-2 border-b border-neon/20 px-4 py-3">
+						<span class="h-3 w-3 rounded-full bg-neon/60 shadow-neon-sm"></span>
+						<span class="h-3 w-3 rounded-full bg-cyber/60"></span>
+						<span class="ml-2 text-faint">majunko@~/ $ zsh</span>
+					</div>
+					<div class="space-y-2 px-5 py-6 text-mist">
+						<p><span class="text-neon">$</span> <span class="neon-text">whoami</span></p>
+					<p>{NAME} <span class="text-faint">(aka {ALIAS})</span></p>
+<p class="pt-3"><span class="text-neon">$</span> cat profile.json</p>
+					<pre set:html={profileText} class="whitespace-pre text-faint"></pre>
+						<p class="pt-2"><span class="text-neon">$</span> <span class="blink text-neon-bright">▌</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<script data-astro-rerun is:inline>
+	(function () {
+		const host = document.getElementById('typed');
+		if (!host) return;
+
+		let phrases = [];
+		if (host.dataset.phrases) {
+			try {
+				phrases = JSON.parse(host.dataset.phrases);
+			} catch {
+				phrases = [];
+			}
+		}
+		if (phrases.length === 0) return;
+
+		let phraseIndex = 0;
+		let charIndex = 0;
+		let deleting = false;
+
+		const tick = () => {
+			const phrase = phrases[phraseIndex];
+			if (!phrase) return;
+
+			charIndex += deleting ? -1 : 1;
+			host.textContent = phrase.slice(0, charIndex);
+
+			let delay = deleting ? 32 : 75;
+			if (!deleting && charIndex === phrase.length) {
+				delay = 1800;
+				deleting = true;
+			} else if (deleting && charIndex === 0) {
+				deleting = false;
+				phraseIndex = (phraseIndex + 1) % phrases.length;
+				delay = 450;
+			}
+			setTimeout(tick, delay);
+		};
+		tick();
+	})();
+</script>

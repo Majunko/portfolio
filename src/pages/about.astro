@@ -1,0 +1,122 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EmailLink from '../components/EmailLink.astro';
+import { ALIAS, NAME, SOCIALS, skills } from '../data/site';
+
+const title = `About — ${NAME}`;
+const description =
+	`${NAME}, aka ${ALIAS} — a terminal-first developer who builds CLIs and automations. Here is the story behind the shell prompt.`;
+
+const focus = [
+	{
+		title: 'CLI tooling',
+		body: 'Rich interactive terminals, OAuth flows and ergonomic commands that make daily workflows faster.',
+	},
+	{
+		title: 'Integrations',
+		body: 'Wiring third-party APIs together, from Tidal and Last.fm to ListenBrainz.',
+	},
+	{
+		title: 'Client-side apps',
+		body: 'Small, dependency-free web apps that run entirely in the browser — your data never leaves your machine.',
+	},
+];
+---
+
+<Layout title={title} description={description}>
+	<section class="mx-auto max-w-5xl px-6 py-24">
+		<header data-reveal>
+			<p class="font-mono text-sm text-faint">
+				<span class="neon-text">//</span> ~/about
+			</p>
+			<h1 class="mt-3 text-4xl font-bold text-mist sm:text-5xl">
+				Behind the <span class="neon-text neon-flicker">&#36;prompt</span>
+			</h1>
+			<p class="mt-4 font-mono text-sm text-faint">
+				<span class="text-neon-bright neon-text">{NAME}</span> — aka {ALIAS}
+			</p>
+		</header>
+
+		<div class="mt-12 grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+			<div class="space-y-5 text-lg leading-relaxed text-mist/90" data-reveal>
+				<p>
+					I'm a terminal-first developer. Most of the software I write never
+					wears a GUI — it lives in a shell, does the job, and gets out of the
+					way. My happy place is a CLI, a good API reference, and a problem
+					that can be automated away.
+				</p>
+				<p>
+					Lately I've been working on tooling around music scrobbling —
+					reconciling what I've actually listened to against streaming
+					services — building client-side scrobblers and safe migration
+					scripts that sync listening history. Having your listening data
+					shouldn't be a privilege, so I like shipping tools that let people
+					keep and move it where they want.
+				</p>
+				<p>
+					When something is repetitive, boring and inevitable, I'd rather
+					write a script than do it twice.
+				</p>
+			</div>
+
+			<aside
+				class="neon-border glass h-fit rounded-lg p-6 font-mono text-sm"
+				data-reveal
+				style="transition-delay: 120ms"
+			>
+				<p class="text-faint">
+					<span class="text-neon">$</span> cat toolbox.md
+				</p>
+				<ul class="mt-4 flex flex-wrap gap-2">
+					{skills.map((skill) => (
+						<li class="rounded border border-neon/25 bg-neon/5 px-3 py-1.5 text-mist">{skill}</li>
+					))}
+				</ul>
+				<p class="mt-6 text-faint">
+					<span class="text-neon">$</span> <span class="blink text-neon-bright">▌</span>
+				</p>
+			</aside>
+		</div>
+
+		<div class="mt-16 grid gap-6 sm:grid-cols-3">
+			{
+				focus.map((item, i) => (
+					<article
+						class="neon-border glass card-hover rounded-lg p-6"
+						data-reveal
+						style={`transition-delay: ${i * 100}ms`}
+					>
+						<h3 class="font-mono text-neon-bright">
+							<span class="text-faint">0{i + 1}.</span> {item.title}
+						</h3>
+						<p class="mt-3 text-sm leading-relaxed text-mist/85">{item.body}</p>
+					</article>
+				))
+			}
+		</div>
+
+		<section class="glass mt-20 rounded-lg px-8 py-12 text-center" data-reveal>
+			<p class="font-mono text-sm text-faint">// have a terminal, need a fix</p>
+			<h2 class="mt-3 text-3xl font-bold text-mist">
+				Say <span class="neon-text">hello</span>
+			</h2>
+			<p class="mx-auto mt-3 max-w-md text-mist/80">
+				Open for collabs, weird automations and interesting problems.
+			</p>
+			<div class="mt-8 flex flex-wrap justify-center gap-4 font-mono text-sm">
+				<EmailLink
+					label="email_me -&gt;"
+					class="rounded border border-neon bg-neon/10 px-6 py-3 text-neon-bright shadow-neon-sm transition-all duration-200 hover:bg-neon/20 hover:shadow-neon"
+				/>
+				<a
+					href={SOCIALS.github}
+					target="_blank"
+					rel="me noopener noreferrer"
+					class="rounded border border-neon/30 px-6 py-3 text-mist transition-all duration-200 hover:border-neon/70 hover:text-neon-bright hover:shadow-neon-sm"
+				>
+					github
+				</a>
+			</div>
+		</section>
+	</section>
+</Layout>

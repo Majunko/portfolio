@@ -1,0 +1,89 @@
+---
+import '../styles/app.css';
+import { ClientRouter } from 'astro:transitions';
+import { ALIAS, NAME, SOCIALS } from '../data/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ParticleField from '../components/ParticleField.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: string;
+}
+
+const { title, description, image = '/og.png' } = Astro.props;
+const site = new URL(Astro.site ?? 'https://majunko.dev');
+const canonical = new URL(Astro.url.pathname, site);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical.href} />
+		<meta name="robots" content="index, follow" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={ALIAS} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical.href} />
+		{image && <meta property="og:image" content={new URL(image, site).href} />}
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify({
+				'@context': 'https://schema.org',
+				'@type': 'Person',
+				name: NAME,
+				alternateName: ALIAS,
+				url: site.href,
+				sameAs: [SOCIALS.github],
+			})}
+		/>
+
+		<ClientRouter />
+	</head>
+	<body class="min-h-screen bg-night font-sans text-mist antialiased">
+		<ParticleField />
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<script data-astro-rerun is:inline>
+	(function () {
+		const targets = document.querySelectorAll('[data-reveal]');
+		if ('IntersectionObserver' in window) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) {
+						if (entry.isIntersecting) {
+							entry.target.classList.add('is-revealed');
+							observer.unobserve(entry.target);
+						}
+					}
+				},
+				{ threshold: 0.12 }
+			);
+			targets.forEach((el) => observer.observe(el));
+		} else {
+			targets.forEach((el) => el.classList.add('is-revealed'));
+		}
+	})();
+</script>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feFlood flood-color="#00ff9d" flood-opacity="0.85" result="color" />
+      <feComposite in="color" in2="blur" operator="in" result="glow" />
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#020604" />
+  <rect width="64" height="64" rx="14" fill="none" stroke="#00ff9d" stroke-opacity="0.4" stroke-width="2" />
+  <text x="32" y="36" font-family="monospace" font-size="34" font-weight="700" text-anchor="middle" fill="#66ffb0" filter="url(#glow)">M</text>
+</svg>
