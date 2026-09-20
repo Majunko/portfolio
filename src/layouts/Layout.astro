@@ -1,6 +1,7 @@
 ---
 import '../styles/app.css';
 import { ClientRouter } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
 import { ALIAS, NAME, SOCIALS } from '../data/site';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -55,6 +56,8 @@ const canonical = new URL(Astro.url.pathname, site);
 		/>
 
 		<ClientRouter />
+
+		<Analytics />
 	</head>
 	<body class="min-h-screen bg-night font-sans text-mist antialiased">
 		<ParticleField />
